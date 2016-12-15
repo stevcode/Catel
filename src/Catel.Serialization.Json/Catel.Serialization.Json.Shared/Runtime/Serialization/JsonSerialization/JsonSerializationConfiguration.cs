@@ -48,11 +48,11 @@ namespace Catel.Runtime.Serialization.Json
         public DateTimeZoneHandling DateTimeZoneHandling { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to format the json string with indentation.
+        /// Gets or sets the json formatting.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if json string should be formatted with indents; otherwise, <c>false</c>.
+        /// The json formatting.
         /// </value>
-        public bool FormatWithIndents { get; set; }
+        public Formatting Formatting { get; set; }
     }
 }

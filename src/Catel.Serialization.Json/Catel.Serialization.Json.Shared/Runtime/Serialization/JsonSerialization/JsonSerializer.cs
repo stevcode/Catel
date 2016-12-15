@@ -777,7 +777,7 @@ namespace Catel.Runtime.Serialization.Json
             var dateTimeKind = DateTimeKind.Unspecified;
             var dateParseHandling = DateParseHandling.None;
             var dateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
-            var formatWithIndents = false;
+            var formatWithIndents = Formatting.None;
 
             var jsonConfiguration = configuration as JsonSerializationConfiguration;
             if (jsonConfiguration != null)
@@ -786,7 +786,7 @@ namespace Catel.Runtime.Serialization.Json
                 dateTimeKind = jsonConfiguration.DateTimeKind;
                 dateParseHandling = jsonConfiguration.DateParseHandling;
                 dateTimeZoneHandling = jsonConfiguration.DateTimeZoneHandling;
-                formatWithIndents = jsonConfiguration.FormatWithIndents;
+                formatWithIndents = jsonConfiguration.Formatting;
             }
 
             switch (contextMode)
@@ -838,7 +838,7 @@ namespace Catel.Runtime.Serialization.Json
             {
                 jsonWriter.Culture = configuration.Culture;
                 jsonWriter.DateTimeZoneHandling = dateTimeZoneHandling;
-                jsonWriter.Formatting = formatWithIndents ? Formatting.Indented : Formatting.None;
+                jsonWriter.Formatting = formatWithIndents;
             }
 
             return GetContext(model, modelType, jsonReader, jsonWriter, contextMode, null, null, configuration);
