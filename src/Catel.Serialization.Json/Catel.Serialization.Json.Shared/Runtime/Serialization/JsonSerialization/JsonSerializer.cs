@@ -14,6 +14,7 @@ namespace Catel.Runtime.Serialization.Json
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Text;
+    using Caching;
     using IoC;
     using Logging;
     using Newtonsoft.Json;
@@ -894,5 +895,68 @@ namespace Catel.Runtime.Serialization.Json
             }
         }
         #endregion
+
+        #region SerializerBase Overrides
+
+        // Overriding base method, but only because I want to keep Catel.Core via nuget. Make change to actual base for nuget.
+
+        private readonly CacheStorage<Type, bool> _shouldSerializeByExternalSerializerCache = new CacheStorage<Type, bool>();
+
+        /// <summary>
+        /// Returns whether json.net should handle the member.  
+        /// <para />
+        /// By default it only handles non-class types.
+        /// </summary>
+        /// <param name="memberType">Type of the member.</param>
+        /// <returns><c>true</c> if json.net should handle the type, <c>false</c> otherwise.</returns>
+        protected override bool ShouldExternalSerializerHandleMember(Type memberType)
+        {
+            return _shouldSerializeByExternalSerializerCache.GetFromCacheOrFetch(memberType, () =>
+            {
+                if (memberType == typeof(IEnumerable))
+                {
+                    return false;
+                }
+
+                if (memberType.IsAbstractEx())
+                {
+                    return false;
+                }
+
+                if (memberType.IsInterfaceEx())
+                {
+                    return false;
+                }
+
+                if (!memberType.IsClassType())
+                {
+                    return true;
+                }
+
+                if (memberType == typeof(string))
+                {
+                    return true;
+                }
+
+                if (memberType == typeof(Guid))
+                {
+                    return true;
+                }
+
+                if (memberType == typeof(Uri))
+                {
+                    return true;
+                }
+
+                if (memberType == typeof(byte[]))
+                {
+                    return true;
+                }
+
+                return false;
+            });
+        }
+
+        #endregion // SerializerBase Overrides
     }
 }
