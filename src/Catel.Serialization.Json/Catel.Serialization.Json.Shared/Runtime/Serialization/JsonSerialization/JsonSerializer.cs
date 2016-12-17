@@ -196,6 +196,11 @@ namespace Catel.Runtime.Serialization.Json
             {
                 jsonArray = JArray.Load(jsonReader);
             }
+            else if (ShouldSerializeAsDictionary(modelType))
+            {
+                Console.WriteLine("test");
+                // 
+            }
             else if (ShouldExternalSerializerHandleMember(modelType))
             {
                 return Convert.ChangeType(jsonReader.Value, modelType, CultureInfo.CurrentCulture);
