@@ -25,8 +25,12 @@ namespace CTesting
 
             //var model = new Testy();
             //model.AllThePoints.Add(new Point(5, 5));
+
+            //model.AllTheDictionaries.Add("test", 1);
+            //model.AllTheDictionaries.Add("testy", 2);
+            //model.AllTheDictionaries.Add("testo", 3);
             //string jsonStringTest = string.Empty;
-            
+
 
             //using (var stream = new MemoryStream())
             //{
@@ -51,7 +55,6 @@ namespace CTesting
 
             //    Console.WriteLine(dTesty.AllThePoints);
             //}
-
 
             var desktopFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             var testFilePath = Path.Combine(desktopFolderPath, "catelTesting.json");
@@ -92,7 +95,17 @@ namespace CTesting
             }
 
             public static readonly PropertyData AllThePointsProperty = RegisterProperty("AllThePoints", typeof(List<Point>), () => new List<Point>());
+
+            /// <summary>SUMMARY</summary>
+            public Dictionary<string, int> AllTheDictionaries
+            {
+                get { return GetValue<Dictionary<string, int>>(AllTheDictionariesProperty); }
+                set { SetValue(AllTheDictionariesProperty, value); }
+            }
+
+            public static readonly PropertyData AllTheDictionariesProperty = RegisterProperty("AllTheDictionaries", typeof(Dictionary<string, int>), () => new Dictionary<string,int>());
             
+
         }
     }
 }
