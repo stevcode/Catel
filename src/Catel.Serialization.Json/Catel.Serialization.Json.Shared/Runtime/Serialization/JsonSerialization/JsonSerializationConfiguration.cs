@@ -54,5 +54,13 @@ namespace Catel.Runtime.Serialization.Json
         /// The json formatting.
         /// </value>
         public Formatting Formatting { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to serialize Enum as string instead of int.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if Enum is serialized as string; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsEnumSerializedWithString { get; set; }
     }
 }

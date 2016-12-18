@@ -339,6 +339,7 @@ namespace Catel.Runtime.Serialization.Json
             var serializationContext = context.Context;
             var jsonSerializer = serializationContext.JsonSerializer;
             var jsonWriter = serializationContext.JsonWriter;
+            var jsonConfiguration = context.Configuration as JsonSerializationConfiguration;
 
             // Only write property names when this is not the root and not a collection
             var isRootDictionary = IsRootDictionary(context, memberValue);
@@ -375,7 +376,11 @@ namespace Catel.Runtime.Serialization.Json
                 jsonWriter.WritePropertyName(memberValue.NameForSerialization);
             }
 
-            if (ReferenceEquals(memberValue.Value, null) || ShouldExternalSerializerHandleMember(memberValue))
+            if (memberValue.ActualMemberType.IsEnumEx() && jsonConfiguration != null && jsonConfiguration.IsEnumSerializedWithString)
+            {
+                jsonSerializer.Serialize(jsonWriter, memberValue.Value.ToString());
+            }
+            else if (ReferenceEquals(memberValue.Value, null) || ShouldExternalSerializerHandleMember(memberValue))
             {
                 jsonSerializer.Serialize(jsonWriter, memberValue.Value);
             }
