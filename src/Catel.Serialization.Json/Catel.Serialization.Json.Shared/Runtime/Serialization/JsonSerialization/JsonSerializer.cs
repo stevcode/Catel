@@ -194,7 +194,7 @@ namespace Catel.Runtime.Serialization.Json
 
             if (ShouldSerializeAsDictionary(modelType))
             {
-                // 
+                // No special treatment, fall through as a modelType of Dictionary.
             }
             else if (ShouldSerializeAsCollection(modelType))
             {
