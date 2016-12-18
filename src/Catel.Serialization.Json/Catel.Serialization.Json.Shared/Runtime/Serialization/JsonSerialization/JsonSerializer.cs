@@ -192,14 +192,13 @@ namespace Catel.Runtime.Serialization.Json
                 return customModel;
             }
 
-            if (ShouldSerializeAsCollection(modelType))
+            if (ShouldSerializeAsDictionary(modelType))
+            {
+                // 
+            }
+            else if (ShouldSerializeAsCollection(modelType))
             {
                 jsonArray = JArray.Load(jsonReader);
-            }
-            else if (ShouldSerializeAsDictionary(modelType))
-            {
-                Console.WriteLine("test");
-                // 
             }
             else if (ShouldExternalSerializerHandleMember(modelType))
             {
