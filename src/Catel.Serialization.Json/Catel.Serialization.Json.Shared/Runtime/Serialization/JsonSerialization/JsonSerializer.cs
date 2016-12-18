@@ -521,6 +521,7 @@ namespace Catel.Runtime.Serialization.Json
         protected override SerializationObject DeserializeMember(ISerializationContext<JsonSerializationContextInfo> context, MemberValue memberValue)
         {
             var serializationContext = context.Context;
+            var jsonConfiguration = context.Configuration as JsonSerializationConfiguration;
 
             var jsonProperties = serializationContext.JsonProperties;
             if (jsonProperties != null)
@@ -643,7 +644,16 @@ namespace Catel.Runtime.Serialization.Json
                         var valueType = memberValue.GetBestMemberType();
                         if (valueType.IsEnumEx())
                         {
-                            var enumName = Enum.GetName(valueType, (int)jsonValue);
+                            string enumName;
+                            if (jsonConfiguration != null && jsonConfiguration.IsEnumSerializedWithString)
+                            {
+                                enumName = (string)jsonValue;
+                            }
+                            else
+                            {
+                                enumName = Enum.GetName(valueType, (int)jsonValue);
+                            }
+
                             if (!string.IsNullOrWhiteSpace(enumName))
                             {
                                 finalMemberValue = Enum.Parse(valueType, enumName, false);
