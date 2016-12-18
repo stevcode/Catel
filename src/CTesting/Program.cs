@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 namespace CTesting
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Catel.Data;
 
     class Program
@@ -22,39 +23,47 @@ namespace CTesting
 
         static void Main(string[] args)
         {
+            var configuration = new JsonSerializationConfiguration
+            {
+                DateParseHandling = DateParseHandling.DateTime,
+                DateTimeKind = DateTimeKind.Unspecified,
+                DateTimeZoneHandling = DateTimeZoneHandling.Unspecified,
+                IsEnumSerializedWithString = true
+            };
 
-            //var model = new Testy();
-            //model.AllThePoints.Add(new Point(5, 5));
+            var model = new Testy();
+            model.Something = Somethings.Thing;
 
-            //model.AllTheDictionaries.Add("test", 1);
-            //model.AllTheDictionaries.Add("testy", 2);
-            //model.AllTheDictionaries.Add("testo", 3);
-            //string jsonStringTest = string.Empty;
+            model.AllThePoints.Add(new Point(5, 5));
 
+            model.AllTheDictionaries.Add("test", 1);
+            model.AllTheDictionaries.Add("testy", 2);
+            model.AllTheDictionaries.Add("testo", 3);
+            var jsonStringTest = string.Empty;
 
-            //using (var stream = new MemoryStream())
-            //{
-            //    var jsonSerializer = new JsonSerializer(SerializationManager, TypeFactory.Default, ObjectAdapter);
-            //    jsonSerializer.Serialize(model, stream);
+            using (var stream = new MemoryStream())
+            {
+                var jsonSerializer = new JsonSerializer(SerializationManager, TypeFactory.Default, ObjectAdapter);
+                jsonSerializer.Serialize(model, stream, configuration);
 
-            //    stream.Position = 0L;
+                stream.Position = 0L;
 
-            //    using (var streamReaderTest = new StreamReader(stream))
-            //    {
-            //        jsonStringTest = streamReaderTest.ReadToEnd();
-            //    }
-            //}
-            //Console.WriteLine(jsonStringTest);
+                using (var streamReaderTest = new StreamReader(stream))
+                {
+                    jsonStringTest = streamReaderTest.ReadToEnd();
+                }
+            }
+            Console.WriteLine(jsonStringTest);
 
-            //using (var stream = new MemoryStream(Encoding.Default.GetBytes(jsonStringTest)))
-            //{
-            //    var jsonSerializer = new JsonSerializer(SerializationManager, TypeFactory.Default, ObjectAdapter);
-            //    var deserialized = jsonSerializer.Deserialize(typeof(Testy), stream);
+            using (var stream = new MemoryStream(Encoding.Default.GetBytes(jsonStringTest)))
+            {
+                var jsonSerializer = new JsonSerializer(SerializationManager, TypeFactory.Default, ObjectAdapter);
+                var deserialized = jsonSerializer.Deserialize(typeof(Testy), stream, configuration);
 
-            //    var dTesty = (Testy)deserialized;
+                var dTesty = (Testy)deserialized;
 
-            //    Console.WriteLine(dTesty.AllThePoints);
-            //}
+                Console.WriteLine(dTesty.AllThePoints);
+            }
 
             var desktopFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             var testFilePath = Path.Combine(desktopFolderPath, "catelTesting.json");
@@ -62,22 +71,28 @@ namespace CTesting
 
             using (var stream = new MemoryStream(Encoding.Default.GetBytes(jsonString)))
             {
-                var configuration = new JsonSerializationConfiguration
-                {
-                    DateParseHandling = DateParseHandling.DateTime,
-                    DateTimeKind = DateTimeKind.Unspecified,
-                    DateTimeZoneHandling = DateTimeZoneHandling.Unspecified
-                };
-
                 var jsonSerializer = new JsonSerializer(SerializationManager, TypeFactory.Default, ObjectAdapter);
                 var deserialized = jsonSerializer.Deserialize(typeof(CLPPage), stream, configuration);
 
                 var page = (CLPPage)deserialized;
-                
-                Console.WriteLine(page.PageNumber);
+                var firstTag = page.Tags.First() as EquivalenceRelationDefinitionTag;
+                var leftSide = firstTag.LeftRelationPart as MultiplicationRelationDefinitionTag;
+                var firstFactor = leftSide.Factors.First() as NumericValueDefinitionTag;
+                var val = firstFactor.NumericValue;
+
+                Console.WriteLine(val);
             }
 
             Console.ReadLine();
+        }
+
+        public enum Somethings
+        {
+            Some,
+            Thing,
+            Is,
+            An,
+            Enumy
         }
 
         [Serializable]
@@ -86,6 +101,16 @@ namespace CTesting
             public Testy()
             {
             }
+
+            /// <summary>SUMMARY</summary>
+            public Somethings Something
+            {
+                get { return GetValue<Somethings>(SomethingProperty); }
+                set { SetValue(SomethingProperty, value); }
+            }
+
+            public static readonly PropertyData SomethingProperty = RegisterProperty("Something", typeof(Somethings), Somethings.Some);
+            
 
             /// <summary>SUMMARY</summary>
             public List<Point> AllThePoints
