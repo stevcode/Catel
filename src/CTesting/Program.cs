@@ -110,7 +110,7 @@ namespace CTesting
                 set { SetValue(AUnsignedNullableProperty, value); }
             }
 
-            public static readonly PropertyData AUnsignedNullableProperty = RegisterProperty("AUnsignedNullable", typeof(uint?), null);
+            public static readonly PropertyData AUnsignedNullableProperty = RegisterProperty("AUnsignedNullable", typeof(uint?));
             
 
             /// <summary>SUMMARY</summary>
