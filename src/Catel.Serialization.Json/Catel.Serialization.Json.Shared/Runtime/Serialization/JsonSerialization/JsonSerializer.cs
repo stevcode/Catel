@@ -376,7 +376,7 @@ namespace Catel.Runtime.Serialization.Json
                 jsonWriter.WritePropertyName(memberValue.NameForSerialization);
             }
 
-            if (memberValue.ActualMemberType.IsEnumEx() && jsonConfiguration != null && jsonConfiguration.IsEnumSerializedWithString)
+            if (memberValue.ActualMemberType != null && memberValue.ActualMemberType.IsEnumEx() && jsonConfiguration != null && jsonConfiguration.IsEnumSerializedWithString)
             {
                 jsonSerializer.Serialize(jsonWriter, memberValue.Value.ToString());
             }
