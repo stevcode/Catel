@@ -31,39 +31,40 @@ namespace CTesting
                 IsEnumSerializedWithString = true
             };
 
-            var model = new Testy();
-            model.Something = Somethings.Thing;
+            //var model = new Testy();
+            //model.AUnsignedNullable = 0;
+            //model.Something = Somethings.Thing;
 
-            model.AllThePoints.Add(new Point(5, 5));
+            //model.AllThePoints.Add(new Point(5, 5));
 
-            model.AllTheDictionaries.Add("test", 1);
-            model.AllTheDictionaries.Add("testy", 2);
-            model.AllTheDictionaries.Add("testo", 3);
-            var jsonStringTest = string.Empty;
+            //model.AllTheDictionaries.Add("test", 1);
+            //model.AllTheDictionaries.Add("testy", 2);
+            //model.AllTheDictionaries.Add("testo", 3);
+            //var jsonStringTest = string.Empty;
 
-            using (var stream = new MemoryStream())
-            {
-                var jsonSerializer = new JsonSerializer(SerializationManager, TypeFactory.Default, ObjectAdapter);
-                jsonSerializer.Serialize(model, stream, configuration);
+            //using (var stream = new MemoryStream())
+            //{
+            //    var jsonSerializer = new JsonSerializer(SerializationManager, TypeFactory.Default, ObjectAdapter);
+            //    jsonSerializer.Serialize(model, stream, configuration);
 
-                stream.Position = 0L;
+            //    stream.Position = 0L;
 
-                using (var streamReaderTest = new StreamReader(stream))
-                {
-                    jsonStringTest = streamReaderTest.ReadToEnd();
-                }
-            }
-            Console.WriteLine(jsonStringTest);
+            //    using (var streamReaderTest = new StreamReader(stream))
+            //    {
+            //        jsonStringTest = streamReaderTest.ReadToEnd();
+            //    }
+            //}
+            //Console.WriteLine(jsonStringTest);
 
-            using (var stream = new MemoryStream(Encoding.Default.GetBytes(jsonStringTest)))
-            {
-                var jsonSerializer = new JsonSerializer(SerializationManager, TypeFactory.Default, ObjectAdapter);
-                var deserialized = jsonSerializer.Deserialize(typeof(Testy), stream, configuration);
+            //using (var stream = new MemoryStream(Encoding.Default.GetBytes(jsonStringTest)))
+            //{
+            //    var jsonSerializer = new JsonSerializer(SerializationManager, TypeFactory.Default, ObjectAdapter);
+            //    var deserialized = jsonSerializer.Deserialize(typeof(Testy), stream, configuration);
 
-                var dTesty = (Testy)deserialized;
+            //    var dTesty = (Testy)deserialized;
 
-                Console.WriteLine(dTesty.AllThePoints);
-            }
+            //    Console.WriteLine(dTesty.AllThePoints);
+            //}
 
             var desktopFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             var testFilePath = Path.Combine(desktopFolderPath, "catelTesting.json");
@@ -101,6 +102,16 @@ namespace CTesting
             public Testy()
             {
             }
+
+            /// <summary>SUMMARY</summary>
+            public uint? AUnsignedNullable
+            {
+                get { return GetValue<uint?>(AUnsignedNullableProperty); }
+                set { SetValue(AUnsignedNullableProperty, value); }
+            }
+
+            public static readonly PropertyData AUnsignedNullableProperty = RegisterProperty("AUnsignedNullable", typeof(uint?), null);
+            
 
             /// <summary>SUMMARY</summary>
             public Somethings Something
